@@ -4,6 +4,10 @@ const cors = require('cors')
 require('dotenv').config()
 let bodyParser = require('body-parser');
 
+//body-parser
+app.use(bodyParser.urlencoded({extended:false}))
+app.use(bodyParser.json())
+
 const mongoose = require('mongoose')
 mongoose.connect(process.env.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true})
 
@@ -12,6 +16,8 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
   username: {type: String, required: true},
 })
+
+
 
 const exerciseSchema = new Schema({
   _id: {type: Number},
@@ -31,9 +37,30 @@ app.get('/', (req, res) => {
 });
 
 
-app.post("/api/users", (req, res) => {
+const createUsername = async (data) => {
   try {
+    let {username} = data;
+    const usernameDocument = new User({
+      username: username
+    }); 
+    return {
+      "username": usernameDocument.username,
+      "_id": usernameDocument._id
+    }
+  } catch (err) {
+    console.error("Error in createUsername: ", err);
+  }
+}
 
+
+app.post("/api/users", async (req, res) => {
+  try {
+    let {username} = req.body
+    let dataObj = {
+      "username": username
+    }
+    let document = await createUsername(dataObj)
+    return res.json(document)
   } catch (err) {
     console.error("Error in /api/users:", err)
     return res.json({
