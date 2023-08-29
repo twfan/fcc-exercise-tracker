@@ -46,6 +46,17 @@ const findByid = async (data) => {
   }
 }
 
+const findUsers = async (data) => {
+  try {
+    const filter = {}
+    let usersFound = await User.find(filter);
+    if (!usersFound) return false
+    return usersFound
+  } catch (err) {
+
+  }
+}
+
 const findExercise = async (data) => {
   try {
     let {id, from, to, limit} = data
@@ -97,6 +108,18 @@ const createUsername = async (data) => {
   }
 }
 
+app.get("/api/users", async (req, res) => {
+  try {
+    let users = await findUsers()
+    return res.json(users)
+  } catch (err) {
+    console.error("Error in get /api/users:", err)
+    return res.json({
+      "error": "An error occured"
+    })
+  }
+})
+
 
 app.post("/api/users", async (req, res) => {
   try {
@@ -107,7 +130,7 @@ app.post("/api/users", async (req, res) => {
     let document = await createUsername(dataObj)  
     return res.json(document)
   } catch (err) {
-    console.error("Error in /api/users:", err)
+    console.error("Error in post /api/users:", err)
     return res.json({
       "error": "An error occured"
     })
