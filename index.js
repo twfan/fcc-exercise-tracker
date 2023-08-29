@@ -157,8 +157,8 @@ app.post("/api/users/:id/exercises", async (req,res) => {
       let formattedData = {
         "username": user.username,
         "description": description,
-        "duration": duration,
-        "date" :dataObj.toDateString(),
+        "duration": Number(duration),
+        "date" :dateObj.toDateString(),
         "_id" : user._id
       }
       return res.json(formattedData)
