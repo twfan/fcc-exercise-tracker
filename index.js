@@ -147,14 +147,21 @@ app.post("/api/users/:id/exercises", async (req,res) => {
 
     if (user) {
       let dataObj = {
-        "idUsername": id,
         "username": user.username,
+        "idUsername": id,
         "description": description,
         "duration": duration,
         "date": dateObj
       }
       let documentCreated = await createExercise(dataObj)
-      return res.json(documentCreated)
+      let formattedData = {
+        "username": user.username,
+        "description": description,
+        "duration": duration,
+        "date" :dataObj.toDateString(),
+        "_id" : user._id
+      }
+      return res.json(formattedData)
     }
   } catch (err) {
     console.error("Error in /api/exercise:", err)
