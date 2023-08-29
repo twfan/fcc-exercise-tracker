@@ -82,7 +82,7 @@ const createExercise = async (data) => {
       "_id": foundExercise._id,
       "username": foundExercise.username,
       "date": foundExercise.date.toDateString(),
-      "duration": foundExercise.duration,
+      "duration": Number(foundExercise.duration),
       "description": foundExercise.description
     }
     return formattedData
@@ -185,8 +185,8 @@ app.get('/api/users/:id/logs', async (req, res) => {
       exercisesFound.forEach(element => {
         let dateObj = new Date(element.date)
         let formattedData = {
-          "description": element.description,
-          "duration": element.duration,
+          "description": String(element.description),
+          "duration": Number(element.duration),
           "date": dateObj.toDateString()
         }
         arrayLogs.push(formattedData)
